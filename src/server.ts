@@ -9,6 +9,7 @@ import fs from "fs";
 import mongoose from "mongoose";
 
 const artRouter = require("./routes/artRoutes");
+const clickRouter = require("./routes/clickRoutes");
 const app = express();
 
 app.use(cors);
@@ -18,6 +19,8 @@ app.use(helmet);
 app.use(logging);
 
 app.use('/art', artRouter);
+app.use('/click', clickRouter);
+
 app.locals.logStream = fs.createWriteStream("combined.log", { flags: 'a' });
 
 app.get("/", (req: Request, res: Response) => {
