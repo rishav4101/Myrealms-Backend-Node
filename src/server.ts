@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 
 const artRouter = require("./routes/artRoutes");
 const clickRouter = require("./routes/clickRoutes");
+const writeRouter = require("./routes/writeRoutes");
 const app = express();
 
 app.use(cors);
@@ -20,6 +21,7 @@ app.use(logging);
 
 app.use('/art', artRouter);
 app.use('/click', clickRouter);
+app.use('/write', writeRouter);
 
 app.locals.logStream = fs.createWriteStream("combined.log", { flags: 'a' });
 
