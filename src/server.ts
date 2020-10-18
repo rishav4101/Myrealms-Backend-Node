@@ -7,11 +7,16 @@ import logging from "./middlewares/logging";
 import fs from "fs";
 
 import mongoose from "mongoose";
+const session = require('express-session');
 
 const artRouter = require("./routes/artRoutes");
 const clickRouter = require("./routes/clickRoutes");
 const writeRouter = require("./routes/writeRoutes");
+const userRouter = require("./routes/userRoutes");
 const app = express();
+
+require("./models/user")
+require('./config/passport');
 
 app.use(cors);
 app.use(express.json());
@@ -19,9 +24,13 @@ app.use(compression());
 app.use(helmet);
 app.use(logging);
 
+
 app.use('/art', artRouter);
 app.use('/click', clickRouter);
 app.use('/write', writeRouter);
+app.use('/user', userRouter);
+app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
+
 
 app.locals.logStream = fs.createWriteStream("combined.log", { flags: 'a' });
 
