@@ -48,8 +48,6 @@ process.on('SIGINT', function () {
     app.locals.logStream.close();
 })
 
-
-
 server.listen(PORT, () => console.log(`Server started at port ${PORT}`));
 
 export default server;

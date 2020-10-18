@@ -13,8 +13,12 @@ const artPostSchema = new Schema({
         type: String,
         required: true,
     },
+    img: 
+    { 
+        data: Buffer, 
+        contentType: String 
+    }
 });
-
 
 const artPost = mongoose.model("artPost", artPostSchema);
 module.exports = artPost;

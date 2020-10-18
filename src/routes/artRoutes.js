@@ -4,6 +4,24 @@ const { check, validationResult } = require("express-validator");
 
 const artPost = require("../models/artPost");
 const artRouter = express.Router();
+//@ts-ignore
+var fs = require('fs'); 
+//@ts-ignore
+var path = require('path'); 
+var multer = require('multer'); 
+
+var storage = multer.diskStorage({ 
+    //@ts-ignore
+	destination: (req, file, cb) => { 
+		cb(null, 'uploads')
+    }, 
+    //@ts-ignore
+	filename: (req, file, cb) => { 
+		cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) 
+	} 
+}); 
+//@ts-ignore
+var upload = multer({ storage: storage }); 
 
 artRouter.route('/')
 //@ts-ignore
@@ -24,17 +42,22 @@ artRouter.route('/')
     }
 })
 //@ts-ignore
-.post(async (req, res, next) => {
+.post(upload.single('img'), async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     try {
+        console.log(req.body)
         const newPost = new artPost({
             user: req.body.user,
             description: req.body.description,
-            title: req.body.title
+            title: req.body.title,
+            // img: { 
+            //     data: fs.readFileSync(path.join('/uploads/' + req.body.img)), 
+            //     contentType: 'image/png' || 'image/jpeg'
+            // } 
         })
 
         const post = await newPost.save();

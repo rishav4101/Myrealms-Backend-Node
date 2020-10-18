@@ -67,7 +67,7 @@ writeRouter.route('/:id')
 .delete(async (req, res, next) => {
     try {
     await writePost.findById(req.params.id)
-    .then(async (art) => {
+    .then(async (write) => {
         //@ts-ignore
         await write.remove();
         res.json({ msg: "Post Removed" });
