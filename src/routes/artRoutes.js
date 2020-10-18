@@ -54,6 +54,7 @@ artRouter.route('/')
             user: req.body.user,
             description: req.body.description,
             title: req.body.title,
+            time: Date.now(),
             // img: { 
             //     data: fs.readFileSync(path.join('/uploads/' + req.body.img)), 
             //     contentType: 'image/png' || 'image/jpeg'

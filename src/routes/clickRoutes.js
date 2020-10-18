@@ -34,7 +34,8 @@ clickRouter.route('/')
         const newPost = new clickPost({
             user: req.body.user,
             description: req.body.description,
-            title: req.body.title
+            title: req.body.title,
+            time: Date.now(),
         })
 
         const post = await newPost.save();

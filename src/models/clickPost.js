@@ -13,6 +13,9 @@ const clickPostSchema = new Schema({
         type: String,
         required: true,
     },
+    time:{
+        type: Date,
+    },
 });
 
 //@ts-ignore

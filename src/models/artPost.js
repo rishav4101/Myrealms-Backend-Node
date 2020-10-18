@@ -13,6 +13,9 @@ const artPostSchema = new Schema({
         type: String,
         required: true,
     },
+    time:{
+        type: Date,
+    },
     img: 
     { 
         data: Buffer, 
