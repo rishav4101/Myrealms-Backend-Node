@@ -5,9 +5,12 @@ const { check, validationResult } = require("express-validator");
 const writePost = require("../models/writePost");
 const writeRouter = express.Router();
 
+const auth = require('../middlewares/auth');
+const Users = require('../models/user');
+
 writeRouter.route('/')
 //@ts-ignore
-.get(async (req, res, next) => {
+.get(auth.required, async (req, res, next) => {
     try { 
     await writePost.find({})
     .then((writes) => {
@@ -24,7 +27,7 @@ writeRouter.route('/')
     }
 })
 //@ts-ignore
-.post(async (req, res, next) => {
+.post(auth.required, async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -48,7 +51,7 @@ writeRouter.route('/')
 
 writeRouter.route('/:id')
 //@ts-ignore
-.get(async (req, res, next) => {
+.get(auth.required, async (req, res, next) => {
     try { 
     await writePost.findById(req.params.id)
     .then((write) => {
@@ -65,13 +68,21 @@ writeRouter.route('/:id')
     }
 })
 //@ts-ignore
-.delete(async (req, res, next) => {
+.delete(auth.required, async (req, res, next) => {
     try {
+    //@ts-ignore
+    const tuser = await Users.findById(req.payload.id)
     await writePost.findById(req.params.id)
     .then(async (write) => {
         //@ts-ignore
-        await write.remove();
-        res.json({ msg: "Post Removed" });
+        if(write.user == tuser.id){
+            //@ts-ignore
+            await write.remove();
+            res.json({ msg: "Post Removed" });
+        }
+        else{
+            res.json({ msg: "You cannot remove this post" });
+        }
     })
     } catch(err) {
         console.error(err.message);
@@ -79,13 +90,22 @@ writeRouter.route('/:id')
     }
 })
 //@ts-ignore
-.put(async (req, res, next) => {
+.put(auth.required, async (req, res, next) => {
     try {
+    //@ts-ignore
+    const tuser = await Users.findById(req.payload.id)
     await writePost.findByIdAndUpdate(req.params.id, req.body, {useFindAndModify:false})
     //@ts-ignore
     .then(async (write) => {
         //@ts-ignore
-        res.json({ msg: "Post Updated" });
+        if(write.user == tuser.id) {
+            //@ts-ignore
+            res.json({ msg: "Post Updated" });
+        }
+        else {
+            //@ts-ignore
+            res.json({ msg: "You cannot update this post" });
+        }
     })
     } catch(err) {
         console.error(err.message);
