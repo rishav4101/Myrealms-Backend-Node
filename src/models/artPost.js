@@ -20,7 +20,33 @@ const artPostSchema = new Schema({
     { 
         data: Buffer, 
         contentType: String 
-    }
+    },
+    likes: [
+        {
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "Users",
+          },
+        },
+      ],
+      comments: [
+        {
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "Users",
+          },
+          text: {
+            type: String,
+            required: true,
+          },
+          name: {
+            type: String,
+          },
+          time:{
+            type: Date,
+          },
+        },
+      ],
 });
 
 const artPost = mongoose.model("artPost", artPostSchema);
