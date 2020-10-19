@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const clickPostSchema = new Schema({
     user: {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "Users",
     },
     description: {
         type: String,

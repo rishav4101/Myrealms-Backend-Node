@@ -2,7 +2,7 @@
 const passport = require('passport');
 const userRouter = require('express').Router();
 const auth = require('../middlewares/auth');
-const Users = require('../models/user')
+const Users = require('../models/user');
 
 //POST new user route (optional, everyone has access)
 //@ts-ignore
