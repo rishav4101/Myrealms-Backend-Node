@@ -146,4 +146,38 @@ clickRouter.route('/like/:id')
     } 
 })
 
+clickRouter.route('/unlike/:id')
+//@ts-ignore
+.put(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await clickPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (click) => {
+            //@ts-ignore
+            if (click.likes.filter((like) => like.user.toString() === req.payload.id).length === 0) {
+                return res.status(400).json({ msg: "Post has not yet been liked" });
+            }
+            else{
+              //Get remove index
+              //@ts-ignore
+              const removeIndex = click.likes
+                //@ts-ignore
+                .map((like) => like.user.toString())
+                //@ts-ignore
+                .indexOf(req.payload.id);
+
+              //@ts-ignore
+              click?.likes.splice(removeIndex, 1);
+              await click?.save();
+              res.json({msg: "post unliked"})
+            }
+        })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    } 
+})
+
 module.exports = clickRouter;
