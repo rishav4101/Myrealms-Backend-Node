@@ -34,7 +34,7 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "tsc && node build/index.js",
     "dev": "nodemon -e ts,js",
     "test": "ts-mocha -p tsconfig.json test/**/*.ts"
   },
