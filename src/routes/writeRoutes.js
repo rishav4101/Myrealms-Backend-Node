@@ -35,7 +35,8 @@ writeRouter.route('/')
 
     try {
         const newPost = new writePost({
-            user: req.body.user,
+            //@ts-ignore
+            user: req.payload.id,
             description: req.body.description,
             title: req.body.title,
             time: Date.now(),

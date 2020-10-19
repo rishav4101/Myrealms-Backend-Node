@@ -54,7 +54,8 @@ artRouter.route('/')
     try {
         console.log(req.body)
         const newPost = new artPost({
-            user: req.body.user,
+            //@ts-ignore
+            user: req.payload.id,
             description: req.body.description,
             title: req.body.title,
             time: Date.now(),
