@@ -33,4 +33,48 @@ profileRouter.route('/')
     }
 })
 
+profileRouter.route('/:id')
+//@ts-ignore
+.get(auth.required, async (req, res, next) => {
+    try { 
+    await profile.findById(req.params.id)
+    .then((prof) => {
+        res.statusCode=200;
+        res.setHeader('Content-Type','application/json');
+        res.json(prof);
+    })
+    .catch((err) => {
+        next(err);
+    })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    }
+})
+//@ts-ignore
+.put(auth.required, async (req, res, next) => {
+    try {
+    //@ts-ignore
+    const tuser = await Users.findById(req.payload.id)
+    
+    await profile.findById(req.params.id)
+    //@ts-ignore
+    .then(async (prof) => {
+        //@ts-ignore
+        if(prof.user == tuser.id) {
+            await profile.findByIdAndUpdate(req.params.id, req.body, {useFindAndModify:false})
+            //@ts-ignore
+            res.json({ msg: "Profile Updated" });
+        }
+        else {
+            //@ts-ignore
+            res.json({ msg: "You cannot update this profile" });
+        }
+    })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    }
+})
+
 module.exports = profileRouter;
