@@ -10,6 +10,9 @@ var fs = require('fs');
 var path = require('path'); 
 var multer = require('multer'); 
 
+const auth = require('../middlewares/auth');
+const Users = require('../models/user');
+
 var storage = multer.diskStorage({ 
     //@ts-ignore
 	destination: (req, file, cb) => { 
@@ -25,7 +28,7 @@ var upload = multer({ storage: storage });
 
 artRouter.route('/')
 //@ts-ignore
-.get(async (req, res, next) => {
+.get(auth.required, async (req, res, next) => {
     try { 
     await artPost.find({})
     .then((arts) => {
@@ -42,7 +45,7 @@ artRouter.route('/')
     }
 })
 //@ts-ignore
-.post(upload.single('img'), async (req, res, next) => {
+.post(auth.required, upload.single('img'), async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -71,7 +74,7 @@ artRouter.route('/')
 
 artRouter.route('/:id')
 //@ts-ignore
-.get(async (req, res, next) => {
+.get(auth.required, async (req, res, next) => {
     try { 
     await artPost.findById(req.params.id)
     .then((art) => {
@@ -88,13 +91,21 @@ artRouter.route('/:id')
     }
 })
 //@ts-ignore
-.delete(async (req, res, next) => {
+.delete(auth.required, async (req, res, next) => {
     try {
+    //@ts-ignore
+    const tuser = await Users.findById(req.payload.id)
     await artPost.findById(req.params.id)
     .then(async (art) => {
         //@ts-ignore
-        await art.remove();
-        res.json({ msg: "Post Removed" });
+        if(art.user == tuser.id){
+            //@ts-ignore
+            await art.remove();
+            res.json({ msg: "Post Removed" });
+        }
+        else{
+            res.json({ msg: "You cannot remove this post" });
+        }
     })
     } catch(err) {
         console.error(err.message);
@@ -102,13 +113,22 @@ artRouter.route('/:id')
     }
 })
 //@ts-ignore
-.put(async (req, res, next) => {
+.put(auth.required, async (req, res, next) => {
     try {
+    //@ts-ignore
+    const tuser = await Users.findById(req.payload.id)
     await artPost.findByIdAndUpdate(req.params.id, req.body, {useFindAndModify:false})
     //@ts-ignore
     .then(async (art) => {
         //@ts-ignore
-        res.json({ msg: "Post Updated" });
+        if(art.user == tuser.id) {
+            //@ts-ignore
+            res.json({ msg: "Post Updated" });
+        }
+        else {
+            //@ts-ignore
+            res.json({ msg: "You cannot update this post" });
+        }
     })
     } catch(err) {
         console.error(err.message);
