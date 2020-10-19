@@ -1,6 +1,5 @@
 const jwt = require('express-jwt');
 
-
 //@ts-ignore
 const getTokenFromHeaders = (req) => {
   const { headers: { authorization } } = req;

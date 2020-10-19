@@ -6,7 +6,7 @@ const Users = require('../models/user')
 
 //POST new user route (optional, everyone has access)
 //@ts-ignore
-userRouter.post('/', auth.optional, (req, res, next) => {
+userRouter.post('/', auth.optional, async (req, res, next) => {
   const { body: { user } } = req;
 
   if(!user.email) {
@@ -28,14 +28,15 @@ userRouter.post('/', auth.optional, (req, res, next) => {
   const finalUser = new Users(user);
   //@ts-ignore
   finalUser.setPassword(user.password);
-
   return finalUser.save()
+
   //@ts-ignore
-    .then(() => res.json({ user: finalUser.toAuthJSON() }));
+  .then(() => res.json({ user: finalUser.toAuthJSON() }))
+  .catch((err) => {console.log(err)});
 });
 
 //POST login route (optional, everyone has access)
-userRouter.post('/login', auth.optional, (req, res, next) => {
+userRouter.post('/login', auth.optional, async (req, res, next) => {
   const { body: { user } } = req;
 
   if(!user.email) {
