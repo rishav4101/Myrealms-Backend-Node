@@ -16,6 +16,32 @@ const clickPostSchema = new Schema({
     time:{
         type: Date,
     },
+    likes: [
+        {
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "Users",
+          },
+        },
+      ],
+      comments: [
+        {
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "Users",
+          },
+          text: {
+            type: String,
+            required: true,
+          },
+          name: {
+            type: String,
+          },
+          time:{
+            type: Date,
+          },
+        },
+      ],
 });
 
 //@ts-ignore

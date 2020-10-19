@@ -99,11 +99,13 @@ clickRouter.route('/:id')
     try {
     //@ts-ignore
     const tuser = await Users.findById(req.payload.id)
-    await clickPost.findByIdAndUpdate(req.params.id, req.body, {useFindAndModify:false})
+    
+    await clickPost.findById(req.params.id)
     //@ts-ignore
     .then(async (click) => {
         //@ts-ignore
         if(click.user == tuser.id) {
+            await clickPost.findByIdAndUpdate(req.params.id, req.body, {useFindAndModify:false})
             //@ts-ignore
             res.json({ msg: "Post Updated" });
         }
@@ -116,6 +118,32 @@ clickRouter.route('/:id')
         console.error(err.message);
         res.sendStatus(500);
     }
+})
+
+clickRouter.route('/like/:id')
+//@ts-ignore
+.put(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await clickPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (click) => {
+            //@ts-ignore
+            if (click.likes.filter((like) => like.user.toString() === req.payload.id).length > 0) {
+                return res.status(400).json({ msg: "Post already liked" });
+            }
+            else {
+                //@ts-ignore
+                click.likes.unshift({ user: req.payload.id });
+                await click?.save()
+                res.json({msg: "post liked"})
+            }
+        })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    } 
 })
 
 module.exports = clickRouter;
