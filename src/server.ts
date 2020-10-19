@@ -4,7 +4,7 @@ import compression from "compression";
 import helmet from "./middlewares/helmet";
 import cors from "./middlewares/cors";
 import logging from "./middlewares/logging";
-import fs from "fs";
+// import fs from "fs";
 
 import mongoose from "mongoose";
 const session = require('express-session');
@@ -32,7 +32,7 @@ app.use('/user', userRouter);
 app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
 
-app.locals.logStream = fs.createWriteStream("combined.log", { flags: 'a' });
+// app.locals.logStream = fs.createWriteStream("combined.log", { flags: 'a' });
 
 app.get("/", (req: Request, res: Response) => {
     return res.send({
