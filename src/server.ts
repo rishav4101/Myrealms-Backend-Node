@@ -42,7 +42,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 const server = http.createServer(app);
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 mongoose.connect(process.env.DATABASE_URL as string, {useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify:false})
 //@ts-ignore
