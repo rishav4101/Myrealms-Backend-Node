@@ -180,4 +180,72 @@ clickRouter.route('/unlike/:id')
     } 
 })
 
+clickRouter.route('/comment/:id')
+//@ts-ignore
+.post(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await clickPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (click) => {
+        const newComment = {
+            time: Date.now(),
+            text: req.body.text,
+            //@ts-ignore
+            name: tuser?.username,
+            //@ts-ignore
+            user: req.payload.id,
+          };
+          //@ts-ignore
+          click?.comments.unshift(newComment);
+          //@ts-ignore
+          await click.save();
+          //@ts-ignore
+          res.json(click.comments);
+        })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    }
+})
+
+clickRouter.route('/comment/:id/:comment_id')
+//@ts-ignore
+.delete(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await clickPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (click) => {
+        //@ts-ignore
+        const comment = click?.comments.find(
+            //@ts-ignore
+            (comment) => comment.id === req.params.comment_id
+        );
+        // Make sure comment exists
+        if (!comment) {
+            return res.sendStatus(404);
+        }
+        //@ts-ignore
+        if (comment.user.toString() !== req.payload.id) {
+            return res.sendStatus(401);
+        }
+        //@ts-ignore
+        click.comments = click.comments.filter(
+            //@ts-ignore
+            ({ id }) => id !== req.params.comment_id
+        );
+        //@ts-ignore
+        await click.save();
+        //@ts-ignore
+        return res.json({msg:"comment deleted"});
+        })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    }
+})
+
 module.exports = clickRouter;
