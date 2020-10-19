@@ -118,11 +118,12 @@ artRouter.route('/:id')
     try {
     //@ts-ignore
     const tuser = await Users.findById(req.payload.id)
-    await artPost.findByIdAndUpdate(req.params.id, req.body, {useFindAndModify:false})
+    await artPost.findById(req.params.id)
     //@ts-ignore
     .then(async (art) => {
         //@ts-ignore
         if(art.user == tuser.id) {
+            await artPost.findByIdAndUpdate(req.params.id, req.body, {useFindAndModify:false})
             //@ts-ignore
             res.json({ msg: "Post Updated" });
         }
@@ -131,6 +132,134 @@ artRouter.route('/:id')
             res.json({ msg: "You cannot update this post" });
         }
     })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    }
+})
+
+artRouter.route('/like/:id')
+//@ts-ignore
+.put(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await artPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (art) => {
+            //@ts-ignore
+            if (art.likes.filter((like) => like.user.toString() === req.payload.id).length > 0) {
+                return res.status(400).json({ msg: "Post already liked" });
+            }
+            else {
+                //@ts-ignore
+                art.likes.unshift({ user: req.payload.id });
+                await art?.save()
+                res.json({msg: "post liked"})
+            }
+        })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    } 
+})
+
+artRouter.route('/unlike/:id')
+//@ts-ignore
+.put(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await artPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (art) => {
+            //@ts-ignore
+            if (art.likes.filter((like) => like.user.toString() === req.payload.id).length === 0) {
+                return res.status(400).json({ msg: "Post has not yet been liked" });
+            }
+            else{
+              //Get remove index
+              //@ts-ignore
+              const removeIndex = art.likes
+                //@ts-ignore
+                .map((like) => like.user.toString())
+                //@ts-ignore
+                .indexOf(req.payload.id);
+
+              //@ts-ignore
+              art?.likes.splice(removeIndex, 1);
+              await art?.save();
+              res.json({msg: "post unliked"})
+            }
+        })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    } 
+})
+
+artRouter.route('/comment/:id')
+//@ts-ignore
+.post(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await artPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (art) => {
+        const newComment = {
+            time: Date.now(),
+            text: req.body.text,
+            //@ts-ignore
+            name: tuser?.username,
+            //@ts-ignore
+            user: req.payload.id,
+          };
+          //@ts-ignore
+          art?.comments.unshift(newComment);
+          //@ts-ignore
+          await art.save();
+          //@ts-ignore
+          res.json(art.comments);
+        })
+    } catch(err) {
+        console.error(err.message);
+        res.sendStatus(500);
+    }
+})
+
+artRouter.route('/comment/:id/:comment_id')
+//@ts-ignore
+.delete(auth.required, async (req, res, next) => {
+    try {
+        //@ts-ignore
+        const tuser = await Users.findById(req.payload.id)
+        await artPost.findById(req.params.id)
+        //@ts-ignore
+        .then(async (art) => {
+        //@ts-ignore
+        const comment = art?.comments.find(
+            //@ts-ignore
+            (comment) => comment.id === req.params.comment_id
+        );
+        // Make sure comment exists
+        if (!comment) {
+            return res.sendStatus(404);
+        }
+        //@ts-ignore
+        if (comment.user.toString() !== req.payload.id) {
+            return res.sendStatus(401);
+        }
+        //@ts-ignore
+        art.comments = art.comments.filter(
+            //@ts-ignore
+            ({ id }) => id !== req.params.comment_id
+        );
+        //@ts-ignore
+        await art.save();
+        //@ts-ignore
+        return res.json({msg:"comment deleted"});
+        })
     } catch(err) {
         console.error(err.message);
         res.sendStatus(500);
