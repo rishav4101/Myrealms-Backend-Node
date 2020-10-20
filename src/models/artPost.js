@@ -18,8 +18,7 @@ const artPostSchema = new Schema({
     },
     img: 
     { 
-        data: Buffer, 
-        contentType: String 
+        type: String,
     },
     likes: [
         {

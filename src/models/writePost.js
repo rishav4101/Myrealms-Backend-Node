@@ -13,6 +13,10 @@ const writePostSchema = new Schema({
         type: String,
         required: true,
     },
+    img: 
+    { 
+        type: String,
+    },
     time:{
         type: Date,
     },

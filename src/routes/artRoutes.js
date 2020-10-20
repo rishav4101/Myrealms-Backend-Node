@@ -7,24 +7,24 @@ const artRouter = express.Router();
 //@ts-ignore
 var fs = require('fs'); 
 //@ts-ignore
-var path = require('path'); 
-var multer = require('multer'); 
+// var path = require('path'); 
+// var multer = require('multer'); 
 
 const auth = require('../middlewares/auth');
 const Users = require('../models/user');
 
-var storage = multer.diskStorage({ 
-    //@ts-ignore
-	destination: (req, file, cb) => { 
-		cb(null, 'uploads')
-    }, 
-    //@ts-ignore
-	filename: (req, file, cb) => { 
-		cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) 
-	} 
-}); 
-//@ts-ignore
-var upload = multer({ storage: storage }); 
+// var storage = multer.diskStorage({ 
+//     //@ts-ignore
+// 	destination: (req, file, cb) => { 
+// 		cb(null, 'uploads')
+//     }, 
+//     //@ts-ignore
+// 	filename: (req, file, cb) => { 
+// 		cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) 
+// 	} 
+// }); 
+// //@ts-ignore
+// var upload = multer({ storage: storage }); 
 
 artRouter.route('/')
 //@ts-ignore
@@ -45,20 +45,21 @@ artRouter.route('/')
     }
 })
 //@ts-ignore
-.post(auth.required, upload.single('img'), async (req, res, next) => {
+.post(auth.required, async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const newPost = new artPost({
             //@ts-ignore
             user: req.payload.id,
             description: req.body.description,
             title: req.body.title,
             time: Date.now(),
+            img: req.body.img,
             // img: { 
             //     data: fs.readFileSync(path.join('/uploads/' + req.body.img)), 
             //     contentType: 'image/png' || 'image/jpeg'

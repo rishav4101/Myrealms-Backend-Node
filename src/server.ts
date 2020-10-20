@@ -13,6 +13,7 @@ const artRouter = require("./routes/artRoutes");
 const clickRouter = require("./routes/clickRoutes");
 const writeRouter = require("./routes/writeRoutes");
 const userRouter = require("./routes/userRoutes");
+const imageRouter = require("./routes/imageRoutes");
 const app = express();
 
 require("./models/user")
@@ -29,6 +30,7 @@ app.use('/art', artRouter);
 app.use('/click', clickRouter);
 app.use('/write', writeRouter);
 app.use('/user', userRouter);
+app.use('/img', imageRouter);
 app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
 
