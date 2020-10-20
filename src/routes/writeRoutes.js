@@ -39,6 +39,7 @@ writeRouter.route('/')
             user: req.payload.id,
             description: req.body.description,
             title: req.body.title,
+            img: req.body.img,
             time: Date.now(),
         })
 
