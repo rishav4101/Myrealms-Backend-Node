@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+function cors(_, res, next) {
+    res.set("Access-Control-Allow-Origin", "*");
+    next();
+}
+exports.default = cors;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29ycy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9taWRkbGV3YXJlcy9jb3JzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBRUEsU0FBd0IsSUFBSSxDQUFDLENBQU0sRUFBRSxHQUFhLEVBQUUsSUFBUztJQUN6RCxHQUFHLENBQUMsR0FBRyxDQUFDLDZCQUE2QixFQUFFLEdBQUcsQ0FBQyxDQUFBO0lBQzNDLElBQUksRUFBRSxDQUFBO0FBQ1YsQ0FBQztBQUhELHVCQUdDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgUmVzcG9uc2UgfSBmcm9tIFwiZXhwcmVzc1wiO1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBjb3JzKF86IGFueSwgcmVzOiBSZXNwb25zZSwgbmV4dDogYW55KSB7XG4gICAgcmVzLnNldChcIkFjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpblwiLCBcIipcIilcbiAgICBuZXh0KClcbn0iXX0=
