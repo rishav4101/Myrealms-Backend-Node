@@ -13,6 +13,9 @@ const profileSchema = new Schema({
     bio: {
         type: String,
     },
+    img: {
+        type: String,
+    }
 });
 
 //@ts-ignore

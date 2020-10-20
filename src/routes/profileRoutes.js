@@ -22,6 +22,7 @@ profileRouter.route('/')
             user: req.payload.id,
             fullname: req.body.fullname,
             bio: req.body.bio,
+            img: req.body.img,
         })
 
         const profil = await newProfile.save();
