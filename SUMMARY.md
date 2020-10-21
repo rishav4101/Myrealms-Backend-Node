@@ -1,5 +1,5 @@
 # Table of contents
 
-* [Myrealms Backend](README.md)
-* [Main](myrealms.md)
+* [Getting Started](README.md)
+* [Getting Started](api.md)
 
