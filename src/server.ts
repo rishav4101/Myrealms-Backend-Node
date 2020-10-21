@@ -46,7 +46,7 @@ app.get("/", (req: Request, res: Response) => {
 const server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
 
-mongoose.connect(process.env.DATABASE_URL?.toString() as string, {useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify:false})
+mongoose.connect(process.env.DATABASE_URL as string, {useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify:false})
 //@ts-ignore
 .then((db)=>{
     console.log("connected to db")
