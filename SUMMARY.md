@@ -1,5 +1,5 @@
 # Table of contents
 
 * [Getting Started](README.md)
-* [Getting Started](api.md)
+* [API DOC](api.md)
 
