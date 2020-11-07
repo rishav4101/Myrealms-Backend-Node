@@ -4,11 +4,9 @@ import compression from "compression";
 import helmet from "./middlewares/helmet";
 import cors from "./middlewares/cors";
 import logging from "./middlewares/logging";
-// import fs from "fs";
-
 import mongoose from "mongoose";
-const session = require('express-session');
 
+const session = require('express-session');
 const artRouter = require("./routes/artRoutes");
 const clickRouter = require("./routes/clickRoutes");
 const writeRouter = require("./routes/writeRoutes");
@@ -25,16 +23,12 @@ app.use(compression());
 app.use(helmet);
 app.use(logging);
 
-
 app.use('/art', artRouter);
 app.use('/click', clickRouter);
 app.use('/write', writeRouter);
 app.use('/user', userRouter);
 app.use('/img', imageRouter);
 app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
-
-
-// app.locals.logStream = fs.createWriteStream("combined.log", { flags: 'a' });
 
 app.get("/", (req: Request, res: Response) => {
     return res.send({
